@@ -19,10 +19,10 @@ def main():
             import shutil
             for file in os.listdir(folder_path):
                 source = folder_path + file
-                destination = r"F:\projects\wsmachine\autouploads\static"
+                destination = r"F:\projects\autouploads\static"
                 try:
                     shutil.copy2(source, destination)
-                    print("File copied successfully.")
+                    # print("File copied successfully.")
                 except shutil.SameFileError:
                     print("Source and destination represents the same file.")
                 except IsADirectoryError:
@@ -42,22 +42,24 @@ def main():
                 batches = []
                 final_list = []
                 i = 0
+                listoffiles = os.listdir(folder_path)
                 lengthofnewlines = []
                 while(i<index):
 
-                    if rows[i][6] == 'image':
+                    if rows[i][6] == 'image' and rows[i][5] in listoffiles:
                         batches.append('image')
 
                         image_to_appended = rows[i][5]
                         batches.append(image_to_appended)
 
-                    elif rows[i][6] != 'video' and rows[i][6] != 'image':
+                    elif rows[i][6] != 'video' and rows[i][6] != 'image' and batches != []:
                         batches.append('text')
                         string= ''
                         while rows[i][6] != 'image' and rows[i][6] != 'video' and i + 1 < index :
                             string = string + " " + rows[i][5]
                             i += 1
                             if rows[i][6] == 'image' or rows[i][6] == 'video':
+                                i -= 1
                                 break
                             print('string', string)
                         if rows[i][6] != 'image' and rows[i][6] != 'video' and i == index - 1 :
@@ -102,25 +104,57 @@ def main():
                                 j+=1
                                 continue
                             else:
-                                number = int(temp_list[j].split('@')[1])
+                                number = int(temp_list[j].split('@')[1].split('.')[0])
                                 index = j+1
-                                batch.append(temp_list[j].split('@')[0])
+                                tempBatchlist = []
+                                tempBatchlist.append(temp_list[j].split('@')[0])
+                                numbers = []
+                                numbers.append(int(temp_list[j].split('@')[1].split('.')[1]))
+
                                 while(index<len(temp_list)):
                                     if temp_list[index].find('@') != -1 and temp_list[index].split('@')[1]!='D' and temp_list[index].split('@')[1]!='d':
                                         string_to_search = temp_list[index]
-                                        num_in_string = int(string_to_search.split('@')[1])
+
+                                        splitingmainnumber = string_to_search.split('@')[1]
+                                        main_number = splitingmainnumber.split('.')[0]
+
+                                        num_in_string = int(main_number)
                                         if num_in_string == number:
-                                            batch.append(temp_list[index].split('@')[0])
+
+                                            tempBatchlist.append(temp_list[index].split('@')[0])
+                                            numbers.append(int(splitingmainnumber.split('.')[1]))
                                             print('temp list after remove ', temp_list)
                                             temp_list.pop(index)
                                             index = j
                                     index+=1
+                                print('temp batch list ',tempBatchlist)
+                                print('numbers ', numbers)
+                                for ij in range(0,len(numbers)):
+                                    for ji in range(ij,len(numbers)):
+                                        if numbers[ij]>numbers[ji]:
+                                            temp = tempBatchlist[ij]
+                                            tempBatchlist[ij] = tempBatchlist[ji]
+                                            tempBatchlist[ji] = temp
+                                            temp = numbers[ij]
+                                            numbers[ij] = numbers[ji]
+                                            numbers[ji] = temp
+                                for batching in tempBatchlist:
+                                    batch.append(batching)
                                 batch.append(text+" wst")
                                 print('batches ', batch)
                                 final_sub_list.append(batch)
                         else:
-                            final_sub_list_sub.append(temp_list[j])
-                            final_sub_list_sub.append(text)
+                            if text.find('@Delete') == -1 and text.find('@delete') == -1 :
+                                final_sub_list_sub.append(temp_list[j])
+                                final_sub_list_sub.append(text)
+                            else:
+                                final_sub_list_sub.append(temp_list[j])
+                                final_text_du = text+" update as DPDU"
+                                if final_text_du.find('@Delete') != -1:
+                                    final_text_du = str(final_text_du.split('@Delete')[0]+" "+final_text_du.split('@Delete')[1])
+                                elif final_text_du.find('@delete') != -1:
+                                    final_text_du = str(final_text_du.split('@delete')[0]+" "+final_text_du.split('@delete')[1])
+                                final_sub_list_sub.append(final_text_du)
 
                             final_sub_list.append(final_sub_list_sub)
                         j+=1
@@ -145,8 +179,9 @@ def main():
 
                                 csvwriter.writerow(["","","","","",row[ind],"image","","","",""])
                             else:
+                                row[ind] = str(row[ind].split(r"\n"))
                                 csvwriter.writerow(["","","","","",row[ind],"","","","",""])
-                dir = r'F:\projects\wsmachine\autouploads\static'
+                dir = r'F:\projects\autouploads\static'
 
                 filelist = glob.glob(os.path.join(dir, "*"))
                 for f in filelist:
