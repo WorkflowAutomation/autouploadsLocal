@@ -95,6 +95,7 @@ body{
     margin-right: 0;
 }
 .buttonHolder{ text-align: center; }
+
 </style>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -121,9 +122,15 @@ body{
 
                     <div class="col-md-3 col-sm-6 mb-2 " >
                         <div class="card card-block" style="border-radius:3px;">
-                            <img src="/static/{{rows[k+1]}}" alt="{{rows[k+1]}}" style="height:300px;">
+
+                                <img src="/static/{{rows[k+1]}}" alt="{{rows[k+1]}}" style="height:300px;">
+                                <br>
+                                <div class="mb-0">
+                                    <input type="checkbox" class="btn-check" name="checkboxtodelete" value="{{rows[k+1]}}" id="{{rows[k+1]}}" autocomplete="off">
+                                    <label class="btn btn-outline-secondary" for="{{rows[k+1]}}">Click Me to Delete</label><br>
+                                </div>
                             <input type="hidden" name="attack" value="{{rows[k]}}">
-                            <h5 class="card-title mt-3 mb-3"><textarea rows="4" cols="43" name="attack" class="" >{{rows[k+1]}}</textarea></h5>
+                            <h5 class="card-title mt-3 mb-3"><textarea rows="4" cols="" name="attack" class="" style="width:100%;">{{rows[k+1]}}@</textarea></h5>
                         </div>
                     </div>
 

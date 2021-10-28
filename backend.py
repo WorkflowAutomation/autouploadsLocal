@@ -19,7 +19,7 @@ def main():
             import shutil
             for file in os.listdir(folder_path):
                 source = folder_path + file
-                destination = r"F:\projects\autouploads\static"
+                destination = r"D:\projects\autoUploads\static"
                 try:
                     shutil.copy2(source, destination)
                     # print("File copied successfully.")
@@ -66,7 +66,9 @@ def main():
                             string = string + " " + rows[i][5]
                         sublengthofnewlines = len(re.findall(r"\\n", string))
                         string = re.sub(r"\\n", " \n ", string)
+                        string  = "Title : \n Description : "+string+" \n Price :"
                         batches.append(string)
+                        # print('lengthofnewlines ', sublengthofnewlines, " ", lengthofnewlines)
                         lengthofnewlines.append(sublengthofnewlines)
                         final_list.append(batches)
                         batches = []
@@ -75,15 +77,21 @@ def main():
 
                 return render_template('index.html', final_list = final_list, folder_path=folder_path, lengthofnewlines = lengthofnewlines)
         else:
-            print("attackked   ",request.form.getlist('attack'))
+            # print("attackked   ",request.form.getlist('attack'))
             print('len of list ',len(request.form.getlist('attack')))
+            print('list of check box selected ', request.form.getlist('checkboxtodelete'))
+            checkboxDelete = request.form.getlist('checkboxtodelete')
             list_from_html = request.form.getlist('attack')
             temp_list = []
             final_list = []
             multi_image = []
             for i in range(0,len(list_from_html),2):
                 if list_from_html[i] == 'image':
-
+                    if list_from_html[i+1][-1] == "@":
+                        list_from_html[i+1] = list_from_html[i+1][:-1]
+                    for check_img in checkboxDelete:
+                        if list_from_html[i+1] == check_img:
+                            list_from_html[i+1]+="@D"
                     temp_list.append(list_from_html[i+1])
                 elif list_from_html[i] == 'text':
                     text = list_from_html[i+1]
@@ -180,8 +188,9 @@ def main():
                                 csvwriter.writerow(["","","","","",row[ind],"image","","","",""])
                             else:
                                 row[ind] = str(row[ind].split(r"\n"))
-                                csvwriter.writerow(["","","","","",row[ind],"","","","",""])
-                dir = r'F:\projects\autouploads\static'
+                                # print('row ind ', row[ind][2:-2])
+                                csvwriter.writerow(["","","","","",row[ind][2:-2],"","","","",""])
+                dir = r'D:\projects\autoUploads\static'
 
                 filelist = glob.glob(os.path.join(dir, "*"))
                 for f in filelist:
