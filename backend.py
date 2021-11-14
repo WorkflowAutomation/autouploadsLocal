@@ -152,7 +152,8 @@ def main():
                                 print('batches ', batch)
                                 final_sub_list.append(batch)
                         else:
-                            if text.find('@Delete') == -1 and text.find('@delete') == -1 :
+
+                            if text.find('@Delete') == -1 and text.find('@delete') == -1 and text.find('@DELETE') == -1:
                                 final_sub_list_sub.append(temp_list[j])
                                 final_sub_list_sub.append(text)
                             else:
@@ -162,6 +163,8 @@ def main():
                                     final_text_du = str(final_text_du.split('@Delete')[0]+" "+final_text_du.split('@Delete')[1])
                                 elif final_text_du.find('@delete') != -1:
                                     final_text_du = str(final_text_du.split('@delete')[0]+" "+final_text_du.split('@delete')[1])
+                                elif final_text_du.find('@DELETE') != -1:
+                                    final_text_du = str(final_text_du.split('@DELETE')[0]+" "+final_text_du.split('@DELETE')[1])
                                 final_sub_list_sub.append(final_text_du)
 
                             final_sub_list.append(final_sub_list_sub)

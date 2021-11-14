@@ -109,7 +109,7 @@ body{
       background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
       
     ">
-    <form action="" method="post">
+    <form action="{{url_for('submitted_result')}}" method="post">
     <div class="container mt-2">
         <input type="hidden" name="folder_path" value="{{folder_path}}">
         {% set iterationlength = -1 %}
@@ -168,9 +168,10 @@ body{
         {%endfor%}
     </div>
 
-        <div class="buttonHolder mb-3">
-            <button class="btn btn-secondary col-sm-4 " name="getdata" value="gotdata" onclick="">Submit</button>
-        </div>
+
+            <div class="buttonHolder mb-3">
+                <button class="btn btn-secondary col-sm-4 " name="getdata" value="gotdata" onclick="">Submit</button>
+            </div>
         </form>
     </div>
 </body>
