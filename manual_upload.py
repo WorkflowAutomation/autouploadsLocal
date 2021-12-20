@@ -31,7 +31,7 @@ def main_program():
             image_names = [ str(img.split('.')[-2]).replace(" ", "_").replace(".", "_").replace("-", "_").replace("(","_").replace(")","_") for img in os.listdir(sub_folder) ]
             print("before sub folder name", os.listdir(sub_folder))
             for img in range(len(image_names)):
-                os.rename(os.path.join(sub_folder,old_images_names[img]+"."+extension[img]), os.path.join(sub_folder,image_names[img]+"."+extension[img]))
+                os.rename(os.path.join(sub_folder, old_images_names[img]+"."+extension[img]), os.path.join(sub_folder,image_names[img]+"."+extension[img]))
             print(sub_folder)
 
             for img1 in (os.listdir(sub_folder)):
@@ -190,7 +190,7 @@ def submitted_result():
         for direct in os.listdir(dir):
             path = dir+"\\"+direct
             destination = folder_path+"\\"+direct
-            dest = shutil.move(path, destination, copy_function=shutil.copytree)
+            dest = shutil.copy2(path, destination)
         # shutil.make_archive( folder_path+"dsaca", 'zip', folder_path)
 
     return redirect("/")

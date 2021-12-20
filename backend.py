@@ -173,6 +173,7 @@ def main():
                     final_list.append(final_sub_list)
             print('final list ', final_list)
             folder_path = request.form.get('folder_path')
+            seller_notes = request.form.getlist('seller_notes')
             file_name = folder_path+'updated.csv'
             title = ['Date1', 'Date2', 'Time', 'UserPhone', 'UserName', 'MessageBody', 'MediaType', 'MediaLink', 'QuotedMessage', 'QuotedMessageDate', 'QuotedMessageTime']
             with open(file_name, 'w', newline='',encoding="utf-8") as csvfile:
