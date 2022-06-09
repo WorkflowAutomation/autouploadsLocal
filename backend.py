@@ -66,7 +66,7 @@ def main():
                             string = string + " " + rows[i][5]
                         sublengthofnewlines = len(re.findall(r"\\n", string))
                         string = re.sub(r"\\n", " \n ", string)
-                        string  = "Title : \n Description : "+string+" \n Price :"
+                        string = "Title : \n Description : " + string + " \nTags: \n Product_type: \n Weight: \n Price :"
                         batches.append(string)
                         # print('lengthofnewlines ', sublengthofnewlines, " ", lengthofnewlines)
                         lengthofnewlines.append(sublengthofnewlines)
@@ -101,73 +101,84 @@ def main():
                     j = 0
                     while(j<len(temp_list)):
                         final_sub_list_sub = []
-                        if temp_list[j].find('@') != -1:
-                            print('image has @', temp_list[j])
-                            batch = []
-                            if temp_list[j].split('@')[1] == 'D' or temp_list[j].split('@')[1] == 'd':
-                                print('Delete product ', temp_list[j])
-                                final_sub_list_sub.append(temp_list[j].split('@')[0])
-                                final_sub_list_sub.append(text+" update as DPDU")
+                        try:
+                            if temp_list[j].find('@') != -1:
+                                print('image has @', temp_list[j])
+                                batch = []
+                                try:
+                                    if temp_list[j].split('@')[1] == 'D' or temp_list[j].split('@')[1] == 'd':
+                                        print('Delete product ', temp_list[j])
+                                        final_sub_list_sub.append(temp_list[j].split('@')[0])
+                                        final_sub_list_sub.append(text+" update as DPDU")
+                                        final_sub_list.append(final_sub_list_sub)
+                                        j+=1
+                                        continue
+                                    else:
+                                        number = int(temp_list[j].split('@')[1].split('.')[0])
+                                        index = j+1
+                                        tempBatchlist = []
+                                        tempBatchlist.append(temp_list[j].split('@')[0])
+                                        numbers = []
+                                        numbers.append(int(temp_list[j].split('@')[1].split('.')[1]))
+
+                                        while(index<len(temp_list)):
+                                            try:
+                                                if temp_list[index].find('@') != -1 and temp_list[index].split('@')[1]!='D' and temp_list[index].split('@')[1]!='d':
+                                                    string_to_search = temp_list[index]
+
+                                                    splitingmainnumber = string_to_search.split('@')[1]
+                                                    main_number = splitingmainnumber.split('.')[0]
+
+                                                    num_in_string = int(main_number)
+                                                    if num_in_string == number:
+
+                                                        tempBatchlist.append(temp_list[index].split('@')[0])
+                                                        numbers.append(int(splitingmainnumber.split('.')[1]))
+                                                        print('temp list after remove ', temp_list)
+                                                        temp_list.pop(index)
+                                                        index = j
+                                            except:
+                                                print("This product has error !!!!!")
+                                            index+=1
+                                        print('temp batch list ',tempBatchlist)
+                                        print('numbers ', numbers)
+                                        for ij in range(0,len(numbers)):
+                                            for ji in range(ij,len(numbers)):
+                                                if numbers[ij]>numbers[ji]:
+                                                    temp = tempBatchlist[ij]
+                                                    tempBatchlist[ij] = tempBatchlist[ji]
+                                                    tempBatchlist[ji] = temp
+                                                    temp = numbers[ij]
+                                                    numbers[ij] = numbers[ji]
+                                                    numbers[ji] = temp
+                                        for batching in tempBatchlist:
+                                            batch.append(batching)
+                                        batch.append(text+" wst")
+                                        print('batches ', batch)
+                                        final_sub_list.append(batch)
+                                except:
+                                    print("This batch has error so skipped!!!!!!!!!!")
+                            else:
+                                try:
+                                    if text.find('@Delete') == -1 and text.find('@delete') == -1 and text.find('@DELETE') == -1:
+                                        final_sub_list_sub.append(temp_list[j])
+                                        final_sub_list_sub.append(text)
+                                    else:
+                                        final_sub_list_sub.append(temp_list[j])
+                                        final_text_du = text+" update as DPDU"
+                                        if final_text_du.find('@Delete') != -1:
+                                            final_text_du = str(final_text_du.split('@Delete')[0]+" "+final_text_du.split('@Delete')[1])
+                                        elif final_text_du.find('@delete') != -1:
+                                            final_text_du = str(final_text_du.split('@delete')[0]+" "+final_text_du.split('@delete')[1])
+                                        elif final_text_du.find('@DELETE') != -1:
+                                            final_text_du = str(final_text_du.split('@DELETE')[0]+" "+final_text_du.split('@DELETE')[1])
+                                        final_sub_list_sub.append(final_text_du)
+                                except:
+                                    print("Please delete this product by giving correct values ")
+
                                 final_sub_list.append(final_sub_list_sub)
-                                j+=1
-                                continue
-                            else:
-                                number = int(temp_list[j].split('@')[1].split('.')[0])
-                                index = j+1
-                                tempBatchlist = []
-                                tempBatchlist.append(temp_list[j].split('@')[0])
-                                numbers = []
-                                numbers.append(int(temp_list[j].split('@')[1].split('.')[1]))
-
-                                while(index<len(temp_list)):
-                                    if temp_list[index].find('@') != -1 and temp_list[index].split('@')[1]!='D' and temp_list[index].split('@')[1]!='d':
-                                        string_to_search = temp_list[index]
-
-                                        splitingmainnumber = string_to_search.split('@')[1]
-                                        main_number = splitingmainnumber.split('.')[0]
-
-                                        num_in_string = int(main_number)
-                                        if num_in_string == number:
-
-                                            tempBatchlist.append(temp_list[index].split('@')[0])
-                                            numbers.append(int(splitingmainnumber.split('.')[1]))
-                                            print('temp list after remove ', temp_list)
-                                            temp_list.pop(index)
-                                            index = j
-                                    index+=1
-                                print('temp batch list ',tempBatchlist)
-                                print('numbers ', numbers)
-                                for ij in range(0,len(numbers)):
-                                    for ji in range(ij,len(numbers)):
-                                        if numbers[ij]>numbers[ji]:
-                                            temp = tempBatchlist[ij]
-                                            tempBatchlist[ij] = tempBatchlist[ji]
-                                            tempBatchlist[ji] = temp
-                                            temp = numbers[ij]
-                                            numbers[ij] = numbers[ji]
-                                            numbers[ji] = temp
-                                for batching in tempBatchlist:
-                                    batch.append(batching)
-                                batch.append(text+" wst")
-                                print('batches ', batch)
-                                final_sub_list.append(batch)
-                        else:
-
-                            if text.find('@Delete') == -1 and text.find('@delete') == -1 and text.find('@DELETE') == -1:
-                                final_sub_list_sub.append(temp_list[j])
-                                final_sub_list_sub.append(text)
-                            else:
-                                final_sub_list_sub.append(temp_list[j])
-                                final_text_du = text+" update as DPDU"
-                                if final_text_du.find('@Delete') != -1:
-                                    final_text_du = str(final_text_du.split('@Delete')[0]+" "+final_text_du.split('@Delete')[1])
-                                elif final_text_du.find('@delete') != -1:
-                                    final_text_du = str(final_text_du.split('@delete')[0]+" "+final_text_du.split('@delete')[1])
-                                elif final_text_du.find('@DELETE') != -1:
-                                    final_text_du = str(final_text_du.split('@DELETE')[0]+" "+final_text_du.split('@DELETE')[1])
-                                final_sub_list_sub.append(final_text_du)
-
-                            final_sub_list.append(final_sub_list_sub)
+                        except:
+                            print("this batch has error")
                         j+=1
                     temp_list = []
                     final_list.append(final_sub_list)

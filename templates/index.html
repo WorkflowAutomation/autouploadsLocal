@@ -152,11 +152,24 @@ body{
                                             {% set iterationlength = iterationlength+1 %}
                                             <input type="hidden" name="attack" value="{{rows[k]}}">
                                             <textarea rows="{{lengthofnewlines[i]+2}}" cols="200" id="notes"  name="attack" class="form-control" >{{rows[k+1]}}</textarea>
-                                            <input type="hidden" name="seller_notes" value="{{row[k+1}}">
+                                            <input type="hidden" name="seller_notes" value="{{rows[k+1]}}">
 
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-sm-4 text-center justify-content-center">
+                                        <input type="text" class="form-control" placeholder="Product Type" list="productType" name="attack">
+                                    </div>
+                                    <div class="col-sm-4 text-center justify-content-center">
+                                        <input type="text" class="form-control" placeholder="Cluster Type" list="clusterType" name="attack">
+                                    </div>
+                                    <div class="col-sm-4 text-center justify-content-center">
+                                        <input type="text" class="form-control" placeholder="Fabric Type" list="fabricType" name="attack">
+                                    </div>
+
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -175,4 +188,22 @@ body{
         </form>
     </div>
 </body>
+<div align="center">
+
+                <datalist id="productType">
+                    {% for type in (productType) %}
+                        <option>{{type}}</option>
+                    {% endfor %}
+                </datalist>
+                <datalist id="clusterType">
+                    {% for type in (clusterType) %}
+                        <option>{{type}}</option>
+                    {% endfor %}
+                </datalist>
+                <datalist id="fabricType">
+                    {% for type in (fabricType) %}
+                        <option>{{type}}</option>
+                    {% endfor %}
+                </datalist>
+            </div>
 <!-- Team -->
